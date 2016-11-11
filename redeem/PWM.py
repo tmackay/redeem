@@ -46,31 +46,31 @@ class PWM(object):
         kernel_version = subprocess.check_output(["uname", "-r"]).strip()
         [major, minor, rev] = kernel_version.split("-")[0].split(".")
         if (int(major) == 3 and int(minor) >= 14) or int(major) > 3 :
-            PWM.i2c = Adafruit_I2C(0x70, 2, False)  # Open device
+            #PWM.i2c = Adafruit_I2C(0x70, 2, False)  # Open device
         else:
-            PWM.i2c = Adafruit_I2C(0x70, 1, False)  # Open device
-        PWM.i2c.write8(PWM.PCA9685_MODE1, 0x01)    # Reset
+            #PWM.i2c = Adafruit_I2C(0x70, 1, False)  # Open device
+        #PWM.i2c.write8(PWM.PCA9685_MODE1, 0x01)    # Reset
 
 
     @staticmethod
     def set_frequency(freq):
         """ Set the PWM frequency for all fans connected on this PWM-chip """
 
-        if PWM.i2c is None:
-            PWM.__init_pwm()
+        #if PWM.i2c is None:
+            #PWM.__init_pwm()
         prescaleval = 25000000
         prescaleval /= 4096
         prescaleval /= float(freq)
         prescaleval = int(prescaleval + 0.5)
         prescaleval -= 1
 
-        oldmode = PWM.i2c.readU8(PWM.PCA9685_MODE1)
-        newmode = (oldmode & 0x7F) | 0x10
-        PWM.i2c.write8(PWM.PCA9685_MODE1, newmode)
-        PWM.i2c.write8(PWM.PCA9685_PRESCALE, prescaleval)
-        PWM.i2c.write8(PWM.PCA9685_MODE1, oldmode)
+        #oldmode = PWM.i2c.readU8(PWM.PCA9685_MODE1)
+        #newmode = (oldmode & 0x7F) | 0x10
+        #PWM.i2c.write8(PWM.PCA9685_MODE1, newmode)
+        #PWM.i2c.write8(PWM.PCA9685_PRESCALE, prescaleval)
+        #PWM.i2c.write8(PWM.PCA9685_MODE1, oldmode)
         time.sleep(0.05)
-        PWM.i2c.write8(PWM.PCA9685_MODE1, oldmode | 0xA1)
+        #PWM.i2c.write8(PWM.PCA9685_MODE1, oldmode | 0xA1)
 
         PWM.frequency = freq
 
@@ -79,7 +79,7 @@ class PWM(object):
         """ Set the amount of on-time from 0..1 """
         off = int(value*4095)
         byte_list = [0x00, 0x00, off & 0xFF, off >> 8]
-        PWM.i2c.writeList(0x06+(4*channel), byte_list)
+        #PWM.i2c.writeList(0x06+(4*channel), byte_list)
 
 if __name__ == '__main__':
     import os
